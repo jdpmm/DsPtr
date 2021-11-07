@@ -8,4 +8,4 @@
 - [x] Stack
 - [x] Doubly Linked list
 - [x] Doubly Circular Linked list
-- [ ] BST
+- [x] BST
