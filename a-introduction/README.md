@@ -290,3 +290,197 @@ C: next node to A
 
 B must point to C
 C must point to B
+
+---
+
+## BST
+
+```c
+typedef struct BST {
+    struct BST* rc;
+    struct BST* lc;
+    struct BST* parent;
+
+    int value;
+} bstn;
+bstn* last_parent;
+```
+
+The basic struct and one pointer more "parent" it points to ancestor node, "last_parent" variable is so useful because save the last node created, so it will be the "parent" for the next node to create.
+
+```c
+void push (int value, bstn** root) {
+    bstn* auxroot = *root;
+    if (auxroot == NULL) {
+        *root = create_node(value);
+        (*root)->parent = last_parent;
+    }
+    else {
+        last_parent = *root;
+        if (value < auxroot->value) {
+            printf("PUSHING: [newnode]{%d} < [parent]{%d}\n", value, auxroot->value);
+            push(value, &auxroot->lc);
+        }
+        else {
+            printf("PUSHING: [newnode]{%d} > [parent]{%d}\n", value, auxroot->value);
+            push(value, &auxroot->rc);
+        }
+    }
+}
+```
+
+Doubly pointer because we need to change the value in some time when the node be equals to NULL this node will be the new node that we wanted to create, the rest of the function you'll understate it if you know the theory.
+
+*Ahh, and we update the "last_node" variable*
+
+```c
+int childs (bstn *root) {
+    bool left = root->lc == NULL ? false : true;
+    bool right = root->rc == NULL ? false : true;
+
+    if (left && right) return 2;
+    if (!left && !right) return 0;
+    return 1;
+}
+```
+
+This function let us know if some node has child
+
+```c
+void delete (int value, bstn *root) {
+    bstn* to_rm = find(value, root);
+    if (to_rm != NULL) {
+        int childscount = childs(to_rm);
+
+        if (childscount == 0) {
+            if (value < to_rm->parent->value) {
+                to_rm->parent->lc = NULL;
+            }
+            else {
+                to_rm->parent->rc = NULL;
+            }
+            free (to_rm);
+        }
+        else if (childscount == 1) {
+            if (value < to_rm->parent->value) {
+                if (to_rm->lc != NULL) to_rm->parent->lc = to_rm->lc;
+                else to_rm->parent->lc = to_rm->rc;
+            }
+            else {
+                if (to_rm->lc != NULL) to_rm->parent->rc = to_rm->lc;
+                else to_rm->parent->rc = to_rm->rc;
+            }
+            free(to_rm);
+        }
+
+        else if (childscount == 2) {
+            bstn* last__ = last_inorden(&to_rm);
+            to_rm->value = last__->value;
+            last__->parent->lc = NULL;
+            free (last__);
+        }
+    }
+    else {
+        printf("Node with %d as value doesn't exists\n", value);
+    }
+}
+
+```
+
+Before to delete a node, we need to know if exists, but there are 3 modes to erase a node, [it you can know if you see this video or any video about BST](https://www.youtube.com/watch?v=gcULXE7ViZw&list=LL&index=1&t=561s)
+
+```c
+bstn *root = create_node(7);
+push(20, &root);
+push(5, &root);
+push(15, &root);
+push(10, &root);
+push(4, &root);
+push(33, &root);
+push(2, &root);
+push(25, &root);
+push(6, &root);
+```
+
+It will create a tree like:
+
+```tex
+                                       7
+                                    /     \
+                                   5       20
+                                  / \     /  \
+                                 4   6   15   33
+                                /       /    /
+                               2       10   25
+```
+
+```c
+delete(2, root);
+```
+
+```tex
+                                       7
+                                    /     \
+                                   5       20
+                                  / \     /  \
+                                 4   6   15   33
+                                /       /    /
+                              [2]       10   25
+```
+
+```tex
+                                       7
+                                    /     \
+                                   5       20
+                                  / \     /  \
+                                 4   6   15   33
+                                        /    /
+                                       10   25
+```
+
+```c
+delete(15, root);
+```
+
+```tex
+                                       7
+                                    /     \
+                                   5       20
+                                  / \     /  \
+                                 4   6 [15]   33
+                                        /    /
+                                       10   25
+```
+
+```tex
+                                       7
+                                    /     \
+                                   5       20
+                                  / \     /  \
+                                 4   6   10   33
+                                             /
+                                            25
+```
+
+```c
+delete(20, root);
+```
+
+```tex
+                                       7
+                                    /     \
+                                   5      [20]
+                                  / \     /  \
+                                 4   6   10   33
+                                             /
+                                            25
+```
+
+```tex
+                                       7
+                                    /     \
+                                   5       25
+                                  / \     /  \
+                                 4   6   10   33
+```
+
