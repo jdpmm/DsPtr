@@ -9,3 +9,9 @@
 - [x] Doubly Linked list
 - [x] Doubly Circular Linked list
 - [x] BST
+
+## Intermediate
+- [x] Heap
+- [x] Huffman Tree
+- [x] Union Find
+- [x] Hash Table
