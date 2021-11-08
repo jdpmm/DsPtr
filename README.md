@@ -15,3 +15,11 @@
 - [x] Huffman Tree
 - [x] Union Find
 - [x] Hash Table
+
+## Proficient
+- [x] Suffix Array
+- [ ] Sparse Table
+- [ ] LCA
+- [ ] Sparse Matrix
+- [ ] Simple Grahp
+- [ ] Tries
