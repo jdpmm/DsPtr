@@ -18,8 +18,8 @@
 
 ## Proficient
 - [x] Suffix Array
-- [ ] Sparse Table
-- [ ] LCA
+- [x] Sparse Table
+- [x] LCA
 - [ ] Sparse Matrix
 - [ ] Simple Grahp
 - [ ] Tries
