@@ -25,12 +25,6 @@ san create_ (char* value, int idx) {
     return newnode;
 }
 
-bool char_gt_char (char uno, char dos) {
-    int x = uno;
-    int y = dos;
-    return x < y;
-}
-
 void sort (san* arr, int size) {
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
