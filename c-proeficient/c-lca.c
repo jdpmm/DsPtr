@@ -11,7 +11,6 @@ typedef struct BST {
     int value;
 } bstn;
 bstn* last_parent;
-int nodes_created = 0;
 
 bstn* create_node (int value) {
     bstn* newnode;
@@ -84,6 +83,7 @@ bstn* lca (int v, int vv, bstn* root) {
     }
     else {
         printf("The two nodes must exist\n");
+        return NULL;
     }
 }
 

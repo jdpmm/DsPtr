@@ -20,6 +20,5 @@
 - [x] Suffix Array
 - [x] Sparse Table
 - [x] LCA
-- [ ] Sparse Matrix
-- [ ] Simple Grahp
-- [ ] Tries
+- [x] Sparse Matrix
+- [x] Tries
