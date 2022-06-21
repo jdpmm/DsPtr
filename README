@@ -1,0 +1,27 @@
+Data Structures
+==== ==========
+
+0==========================0
+Introduction
+0==========================0
+- [x] Stack
+- [x] Doubly Linked list
+- [x] Doubly Circular Linked list
+- [x] BST
+
+0==========================0
+Intermediate
+0==========================0
+- [x] Heap
+- [x] Huffman Tree
+- [x] Union Find
+- [x] Hash Table
+
+0==========================0
+Proficient
+0==========================0
+- [x] Suffix Array
+- [x] Sparse Table
+- [x] LCA
+- [x] Sparse Matrix
+- [x] Tries
