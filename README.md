@@ -1,4 +1,4 @@
-# Some Data Structures
+# Data Structures
 
 **created by Juan Diego Patiño Muñoz Mente on 05-11-2021**
 
