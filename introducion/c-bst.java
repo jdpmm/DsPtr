@@ -2,7 +2,7 @@ class Node {
     private Node left;
     private Node right;
     private int value;
-    final private Node parent;
+    private Node parent;
 
     public Node (int value, Node left, Node right, Node parent)
     {
@@ -23,9 +23,14 @@ class Node {
     /*
      * Setters
      * */
-    public void set_left (Node new_left)   { this.left = new_left; }
-    public void set_right (Node new_right) { this.right = new_right; }
-    public void set_value (int new_value)  { this.value = new_value; }
+    public void set_left (Node new_left)     { this.left = new_left; }
+    public void set_right (Node new_right)   { this.right = new_right; }
+    public void set_value (int new_value)    { this.value = new_value; }
+    public void set_parent (Node new_parent) { this.parent = new_parent; }
+    public static void set_parent_to_children (Node left_child, Node right_child, Node ths_parent) {
+        if ( left_child != null ) { left_child.set_parent(ths_parent); }
+        if ( right_child != null ) { right_child.set_parent(ths_parent); }
+    }
 }
 
 public class Bst {
@@ -96,81 +101,89 @@ public class Bst {
             return;
         }
 
-
-        boolean isright_child = true;
-        if ( rm_node.get_parent().get_left() != null ) {
-            if ( rm_node.get_parent().get_left().get_value() == value ) { isright_child = false; }
-        }
-
-        /*
-         * Does not have any child
-         * */
-        if ( rm_node.get_left() == rm_node.get_right() ) {
-            if ( isright_child ) { rm_node.get_parent().set_right(null); }
-            else { rm_node.get_parent().set_left(null); }
-        }
-        /*
-         * Only has its left child
-         * */
-        else if ( rm_node.get_left() != null && rm_node.get_right() == null ) {
-            if ( isright_child ) {
-                rm_node.get_parent().set_right(rm_node.get_left());
-            } else {
-                rm_node.get_parent().set_left(rm_node.get_left());
-            }
-        }
-        /*
-         * Only has its right child
-         * */
-        else if ( rm_node.get_left() == null && rm_node.get_right() != null ) {
-            if ( isright_child ) {
-                rm_node.get_parent().set_right(rm_node.get_right());
-            } else {
-                rm_node.get_parent().set_left(rm_node.get_right());
-            }
-        }
-        /*
-         * Has both children
-         * */
+        char Tnode = '>';
+        if ( rm_node.get_parent() == null ) { Tnode = '*'; }
         else {
-            Node min_node = rm_node.get_right();
-            while ( min_node.get_left() != null ) {
-                min_node = min_node.get_left();
-            }
-            rm_node.set_value(min_node.get_value());
-
-            System.out.println(min_node.get_value());
-            if ( min_node.get_parent().get_right() != null  ) {
-                if ( min_node.get_parent().get_value() == min_node.get_value() ) {
-                    rm_node.set_right(min_node.get_right());
+            if ( rm_node.get_parent().get_left() != null ) {
+                if ( rm_node.get_parent().get_left().get_value() == value ) {
+                    Tnode = '<';
                 }
-            } else {
-                min_node.get_parent().set_left(null);
+            }
+        }
+
+        if ( rm_node.get_left() == rm_node.get_right() ) {
+            if ( Tnode == '*' ) {
+                System.out.println("There is only one node, could not be deleted");
+                return;
+            }
+            if ( Tnode == '<' ) { rm_node.get_parent().set_left(null); }
+            if ( Tnode == '>' ) { rm_node.get_parent().set_right(null); }
+        }
+        else if ( rm_node.get_left() != null && rm_node.get_right() == null ) {
+            if ( Tnode == '*' ) {
+                root.set_value(root.get_left().get_value());
+                root.set_right(root.get_left().get_right());
+                root.set_left(root.get_left().get_left());
+                Node.set_parent_to_children(root.get_left(), root.get_right(), root);
+                return;
+            }
+            rm_node.get_left().set_parent(rm_node.get_parent());
+            if ( Tnode == '>' ) { rm_node.get_parent().set_right(rm_node.get_left()); }
+            else { rm_node.get_parent().set_left(rm_node.get_left()); }
+        }
+        else if ( rm_node.get_left() == null && rm_node.get_right() != null ) {
+            if ( Tnode == '*' ) {
+                root.set_value(root.get_right().get_value());
+                root.set_left(root.get_right().get_left());
+                root.set_right(root.get_right().get_right());
+
+                Node.set_parent_to_children(root.get_left(), root.get_right(), root);
+                return;
+            }
+            rm_node.get_right().set_parent(rm_node.get_parent());
+            if ( Tnode == '>' ) { rm_node.get_parent().set_right(rm_node.get_right()); }
+            else { rm_node.get_parent().set_left(rm_node.get_right()); }
+        }
+        else {
+            Node min = rm_node.get_right();
+            int lvls = 0;
+            while ( min.get_left() != null ) {
+                min = min.get_left();
+                lvls++;
+            }
+
+            rm_node.set_value(min.get_value());
+            if ( lvls == 0 ) {
+                if ( min.get_right() != null ) {
+                    min.get_right().set_parent(rm_node);
+                    rm_node.set_right(min.get_right());
+                }
+                else {
+                    min.get_parent().set_right(null);
+                }
+            }
+            else {
+                min.get_parent().set_left(null);
             }
         }
     }
 
     public static void main(String[] args)
     {
-        Node root = bst_make_node(10, null, null, null);
-        bst_push(root, 5);
-        bst_push(root, 15);
+        Node root2 = bst_make_node(50, null, null, null);
+        bst_push(root2, 80);
+        bst_push(root2, 90);
+        bst_push(root2, 70);
+        bst_push(root2, 60);
+        bst_push(root2, 75);
 
-        bst_push(root, 3);
-        bst_push(root, 4);
-        bst_push(root, 1);
-        bst_push(root, 2);
+        bst_push(root2, 20);
+        bst_push(root2, 10);
+        bst_push(root2, 40);
+        bst_push(root2, 30);
 
-        bst_push(root, 7);
-        bst_push(root, 6);
-
-        bst_push(root, 12);
-        bst_push(root, 16);
-        bst_push(root, 11);
-        bst_push(root, 13);
-        bst_push(root, 19);
-
-        bst_remove(root, 5);
-        bst_print(root);
+        bst_remove(root2, 20);
+        bst_remove(root2, 30);
+        bst_print(root2);
     }
 }
