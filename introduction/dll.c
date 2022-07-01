@@ -124,6 +124,17 @@ void dll_edit (struct Node* root, int new_value, int index)
     root->value = new_value;
 }
 
+void dll_deleteduplicates (struct Node** root, int torm)
+{
+    struct Node* rmdts = (*root);
+    while ( rmdts ) {
+        if ( rmdts->value == torm ) {
+            dll_pop(root, rmdts->index);
+        }
+        rmdts = rmdts->next;
+    }
+}
+
 int main ()
 {
     struct Node* main_node = dll_make(2, NULL, NULL);
@@ -136,13 +147,11 @@ int main ()
     dll_push(&main_node, 16, -1);
     dll_push(&main_node, 16, length - 1);
     dll_edit(main_node, -16, length - 1);
+    dll_push(&main_node, 16, 1);
     dll_print(main_node);
 
-    dll_pop(&main_node, length - 1);
+    dll_deleteduplicates(&main_node, 16);
     dll_pop(&main_node, 0);
-    dll_pop(&main_node, length - 1);
-    dll_pop(&main_node, 0);
-
     dll_print(main_node);
     return 0;
 }
