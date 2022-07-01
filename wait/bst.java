@@ -101,6 +101,14 @@ public class Bst {
             return;
         }
 
+        /*
+         * Tnode saves which child is the node to be deleted, for example:
+         *         5
+         *       /   \
+         *      2     6
+         * if the number 6 will be deleted, Tnode will be equals to '>' since
+         * is the right child, '<' if it's the left child and '*' is the root.
+         * */
         char Tnode = '>';
         if ( rm_node.get_parent() == null ) { Tnode = '*'; }
         else {
@@ -111,6 +119,9 @@ public class Bst {
             }
         }
 
+        /*
+         * Does not have any child
+         * */
         if ( rm_node.get_left() == rm_node.get_right() ) {
             if ( Tnode == '*' ) {
                 System.out.println("There is only one node, could not be deleted");
@@ -119,6 +130,9 @@ public class Bst {
             if ( Tnode == '<' ) { rm_node.get_parent().set_left(null); }
             if ( Tnode == '>' ) { rm_node.get_parent().set_right(null); }
         }
+        /*
+         * Only has its left child
+         * */
         else if ( rm_node.get_left() != null && rm_node.get_right() == null ) {
             if ( Tnode == '*' ) {
                 root.set_value(root.get_left().get_value());
@@ -131,6 +145,9 @@ public class Bst {
             if ( Tnode == '>' ) { rm_node.get_parent().set_right(rm_node.get_left()); }
             else { rm_node.get_parent().set_left(rm_node.get_left()); }
         }
+        /*
+         * Only has its right child
+         * */
         else if ( rm_node.get_left() == null && rm_node.get_right() != null ) {
             if ( Tnode == '*' ) {
                 root.set_value(root.get_right().get_value());
@@ -144,6 +161,9 @@ public class Bst {
             if ( Tnode == '>' ) { rm_node.get_parent().set_right(rm_node.get_right()); }
             else { rm_node.get_parent().set_left(rm_node.get_right()); }
         }
+        /*
+         * Has both children
+         * */
         else {
             Node min = rm_node.get_right();
             int lvls = 0;
