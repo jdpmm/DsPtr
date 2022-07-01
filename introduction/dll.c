@@ -45,6 +45,11 @@ void dll_pop (struct Node** root, int index)
         return;
     }
 
+    /**
+     * insert_n is just a reference to whole node,
+     * insert_n could not modific the whole node, just
+     * its values.
+     * **/
     struct Node* insert_n = (*root);
     while ( insert_n ) {
         if ( insert_n->index == index ) { break; }
@@ -52,15 +57,28 @@ void dll_pop (struct Node** root, int index)
     }
 
     if ( !index ) {
+        /**
+         * When the first node will be deleted
+         * the whole node (root) must be modified,
+         * that's why this part does not use insert_n.
+         * **/
         (*root) = (*root)->next;
         (*root)->prev = NULL;
         dll_update_indexes(insert_n, -1);
     }
     else if ( index == (length - 1) ) {
+        /**
+         * The node to be deleted is the
+         * last one.
+         * **/
         insert_n->prev->next = NULL;
         insert_n->prev = NULL;
     }
     else {
+        /**
+         * The node to be deleted is at
+         * the middle on the list.
+         * **/
         dll_update_indexes(insert_n->next, -1);
         insert_n->next->prev = insert_n->prev;
         insert_n->prev->next = insert_n->next;
@@ -73,6 +91,11 @@ void dll_pop (struct Node** root, int index)
 
 void dll_push (struct Node** root, int value, int index)
 {
+    /**
+     * -1 included because if it wants push some
+     * node at the start of the list the index
+     * must be -1.
+     * **/
     if ( index >= length || index <= -2  ) {
         printf("Unrechable index: %d\n", index);
         return;
@@ -84,6 +107,10 @@ void dll_push (struct Node** root, int value, int index)
         insert_n = insert_n->next;
     }
 
+    /**
+     * It's the same, when the whole root should be modified
+     * root is used, insert_n otherwise.
+     * **/
     if ( index == -1 ) {
         (*root)->prev = dll_make(value, NULL, *root);
         (*root) = (*root)->prev;
@@ -137,6 +164,11 @@ void dll_deleteduplicates (struct Node** root, int torm)
 
 int main ()
 {
+    /**
+     * This list uses also an index
+     * to make other operations.
+     * The index also starts from 0 :D.
+     * **/
     struct Node* main_node = dll_make(2, NULL, NULL);
     dll_push(&main_node, 4, -1);
     dll_push(&main_node, 8, 1);
